@@ -9,9 +9,10 @@
 #import "PNBarChart.h"
 #import "PNColor.h"
 #import "PNChartLabel.h"
-
+#import "PNBar.h"
 
 @interface PNBarChart () {
+    NSMutableArray *_bars;
     NSMutableArray *_labels;
 }
 
@@ -24,7 +25,7 @@
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
-
+    
     if (self) {
         // Initialization code
         self.backgroundColor = [UIColor whiteColor];
@@ -43,7 +44,7 @@
         _showChartBorder     = NO;
         _yChartLabelWidth    = 18;
     }
-
+    
     return self;
 }
 
@@ -58,7 +59,7 @@
         [self getYValueMax:yValues];
     }
     
-
+    
     _xLabelWidth = (self.frame.size.width - _chartMargin * 2) / [_yValues count];
 }
 
@@ -92,7 +93,7 @@
 - (void)setXLabels:(NSArray *)xLabels
 {
     _xLabels = xLabels;
-
+    
     if (_showLabel) {
         _xLabelWidth = (self.frame.size.width - _chartMargin * 2) / [xLabels count];
     }
@@ -117,17 +118,20 @@
             
             if (labelAddCount == _xLabelSkip) {
                 NSString *labelText = _xLabels[index];
-                PNChartLabel * label = [[PNChartLabel alloc] initWithFrame:CGRectZero];
+                PNChartLabel * label = [[PNChartLabel alloc] initWithFrame:CGRectMake(0, 0, self.barWidth + 3, 60)];
                 label.font = _labelFont;
+                label.numberOfLines = 0;
                 label.textColor = _labelTextColor;
                 [label setTextAlignment:NSTextAlignmentCenter];
                 label.text = labelText;
                 [label sizeToFit];
-                CGFloat labelXPosition  = (index *  _xLabelWidth + _chartMargin + _xLabelWidth /2.0 );
+                CGFloat labelXPosition  = (index *  _xLabelWidth + _chartMargin + _xLabelWidth /2.0 ) + 5;
                 
                 label.center = CGPointMake(labelXPosition,
-                                           self.frame.size.height - xLabelHeight - _chartMargin + label.frame.size.height /2.0 + _labelMarginTop);
+                                           self.frame.size.height - 15 - _chartMargin + label.frame.size.height /2.0 + _labelMarginTop);
                 labelAddCount = 0;
+                
+                //[label setTransform:CGAffineTransformMakeRotation(0.5)];
                 
                 [_labels addObject:label];
                 [self addSubview:label];
@@ -136,38 +140,38 @@
         
         //Add y labels
         
-        float yLabelSectionHeight = (self.frame.size.height - _chartMargin * 2 - xLabelHeight) / _yLabelSum;
-        
-        for (int index = 0; index < _yLabelSum; index++) {
-
-            NSString *labelText = _yLabelFormatter((float)_yValueMax * ( (_yLabelSum - index) / (float)_yLabelSum ));
-            
-            PNChartLabel * label = [[PNChartLabel alloc] initWithFrame:CGRectMake(0,
-                                                                                  yLabelSectionHeight * index + _chartMargin - yLabelHeight/2.0,
-                                                                                  _yChartLabelWidth,
-                                                                                  yLabelHeight)];
-            label.font = _labelFont;
-            label.textColor = _labelTextColor;
-            [label setTextAlignment:NSTextAlignmentRight];
-            label.text = labelText;
-
-            [_labels addObject:label];
-            [self addSubview:label];
-
-        }
+        //        float yLabelSectionHeight = (self.frame.size.height - _chartMargin * 2 - xLabelHeight) / _yLabelSum;
+        //
+        //        for (int index = 0; index < _yLabelSum; index++) {
+        //
+        //            NSString *labelText = _yLabelFormatter((float)_yValueMax * ( (_yLabelSum - index) / (float)_yLabelSum ));
+        //
+        //            PNChartLabel * label = [[PNChartLabel alloc] initWithFrame:CGRectMake(0,
+        //                                                                                  yLabelSectionHeight * index + _chartMargin - yLabelHeight/2.0,
+        //                                                                                  _yChartLabelWidth,
+        //                                                                                  yLabelHeight)];
+        //            label.font = _labelFont;
+        //            label.textColor = _labelTextColor;
+        //            [label setTextAlignment:NSTextAlignmentRight];
+        //            label.text = labelText;
+        //
+        //            [_labels addObject:label];
+        //            [self addSubview:label];
+        //
+        //        }
     }
     
-
+    
     [self viewCleanupForCollection:_bars];
     
     
     //Add bars
-    CGFloat chartCavanHeight = self.frame.size.height - _chartMargin * 2 - xLabelHeight;
+    CGFloat chartCavanHeight = self.frame.size.height - xLabelHeight - 60;
     NSInteger index = 0;
-
+    
     for (NSString *valueString in _yValues) {
         float value = [valueString floatValue];
-
+        
         float grade = (float)value / (float)_yValueMax;
         PNBar *bar;
         CGFloat barWidth;
@@ -187,6 +191,7 @@
                 
             }
         }
+        
         
         bar = [[PNBar alloc] initWithFrame:CGRectMake(barXPosition, //Bar X position
                                                       self.frame.size.height - chartCavanHeight - xLabelHeight - _chartMargin, //Bar Y position
@@ -212,9 +217,16 @@
         //For Click Index
         bar.tag = index;
         
-        [_bars addObject:bar];
+        PNChartLabel * label = [[PNChartLabel alloc] initWithFrame:CGRectMake(barXPosition, bar.frame.origin.y - 30,
+                                                                              barWidth + 5,
+                                                                              30)];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.text = _yLabelFormatter((float)value);
+        [bar addSubview:label];
+        
         [self addSubview:bar];
-
+        [self addSubview:label];
+        
         index += 1;
     }
     
