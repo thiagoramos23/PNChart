@@ -17,5 +17,8 @@
 @property (nonatomic) CAShapeLayer *chartLine;
 @property (nonatomic) UIColor *barColor;
 @property (nonatomic) CGFloat barRadius;
+@property (nonatomic) float yMin;
+@property (nonatomic) float yMax;
+@property (nonatomic) float value;
 
 @end

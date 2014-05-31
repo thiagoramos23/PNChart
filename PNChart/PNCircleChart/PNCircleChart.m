@@ -50,13 +50,13 @@
         [self.layer addSublayer:_circle];
         [self.layer addSublayer:_circleBG];
 
-        _countingLabel = [[UICountingLabel alloc] initWithFrame:CGRectMake(0, 0, 100.0, 50.0)];
-        [_countingLabel setTextAlignment:NSTextAlignmentCenter];
-        [_countingLabel setFont:[UIFont boldSystemFontOfSize:16.0f]];
-        [_countingLabel setTextColor:[UIColor grayColor]];
-        [_countingLabel setCenter:CGPointMake(self.center.x, self.center.y)];
-        _countingLabel.method = UILabelCountingMethodEaseInOut;
-        [self addSubview:_countingLabel];;
+//        _countingLabel = [[UICountingLabel alloc] initWithFrame:CGRectMake(0, 0, 100.0, 50.0)];
+//        [_countingLabel setTextAlignment:NSTextAlignmentCenter];
+//        [_countingLabel setFont:[UIFont boldSystemFontOfSize:16.0f]];
+//        [_countingLabel setTextColor:[UIColor grayColor]];
+//        [_countingLabel setCenter:CGPointMake(self.center.x, self.center.y)];
+//        _countingLabel.method = UILabelCountingMethodEaseInOut;
+//        [self addSubview:_countingLabel];;
     }
 
     return self;
@@ -80,8 +80,8 @@
         format = @"%d";
         break;
     }
-    self.countingLabel.format = format;
-    [self addSubview:self.countingLabel];
+//    self.countingLabel.format = format;
+//    [self addSubview:self.countingLabel];
 
 
     // Add circle params
@@ -100,7 +100,7 @@
     [_circle addAnimation:pathAnimation forKey:@"strokeEndAnimation"];
     _circle.strokeEnd   = [_current floatValue] / [_total floatValue];
 
-    [_countingLabel countFrom:0 to:[_current floatValue] withDuration:1.0];
+//    [_countingLabel countFrom:0 to:[_current floatValue] withDuration:1.0];
 }
 
 
@@ -118,7 +118,7 @@
     _circle.strokeEnd   = [updatedValue floatValue] / [_total floatValue];
     [_circle addAnimation:pathAnimation forKey:@"strokeEndAnimation"];
     
-    [self.countingLabel countFrom:fmin([_current floatValue], [_total floatValue]) to:fmin([_current floatValue] + [growAmount floatValue], [_total floatValue]) withDuration:self.duration];
+//    [self.countingLabel countFrom:fmin([_current floatValue], [_total floatValue]) to:fmin([_current floatValue] + [growAmount floatValue], [_total floatValue]) withDuration:self.duration];
     _current = updatedValue;
 }
 

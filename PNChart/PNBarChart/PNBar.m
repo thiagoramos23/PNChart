@@ -39,21 +39,44 @@
 
 - (void)setGrade:(float)grade
 {
-    _grade = grade;
+    
+    _grade = fabsf(grade);
     UIBezierPath *progressline = [UIBezierPath bezierPath];
+    
+    NSLog(@"%f", (1 - _grade) * self.frame.size.height);
 
-    [progressline moveToPoint:CGPointMake(self.frame.size.width / 2.0, self.frame.size.height)];
-    [progressline addLineToPoint:CGPointMake(self.frame.size.width / 2.0, (1 - grade) * self.frame.size.height)];
+    CGPoint inicio = CGPointMake(self.frame.size.width / 2.0, self.frame.size.height);
+    CGPoint fim = CGPointMake(self.frame.size.width / 2.0, (1 - _grade) * self.frame.size.height);
+    
+    CGFloat alturaInicial = self.frame.size.height;
+    CGFloat alturaFinal = (1 - _grade) * self.frame.size.height;
+    if (_yMin < 0) {
+        alturaInicial = self.frame.size.height / 2;
+    }
+    
+    if (grade < 0) {
+        alturaFinal = (self.frame.size.height / 2) - (_value / 10);
+    } else if (_yMin < 0 &&  grade > 0){
+        alturaFinal = alturaFinal - alturaInicial;
+    }
+    
+    [progressline moveToPoint:CGPointMake(self.frame.size.width / 2.0, alturaInicial)];
+    [progressline addLineToPoint:CGPointMake(self.frame.size.width / 2.0, _value == 0 ? alturaInicial : alturaFinal)];
 
     [progressline setLineWidth:1.0];
     [progressline setLineCapStyle:kCGLineCapSquare];
     _chartLine.path = progressline.CGPath;
 
     if (_barColor) {
-        _chartLine.strokeColor = [_barColor CGColor];
+        if (grade > 0) {
+            _chartLine.strokeColor = [_barColor CGColor];
+        } else {
+            _chartLine.strokeColor = [PNRed CGColor];
+        }
     }
     else {
         _chartLine.strokeColor = [PNGreen CGColor];
+        
     }
 
     CABasicAnimation *pathAnimation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];

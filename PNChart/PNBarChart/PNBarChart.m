@@ -169,6 +169,14 @@
     CGFloat chartCavanHeight = self.frame.size.height - xLabelHeight - 60;
     NSInteger index = 0;
     
+    float yMin = MAXFLOAT;
+    for (NSString *value in _yValues) {
+        float y = [value floatValue];
+        if (y < yMin) {
+            yMin = y;
+        }
+    }
+    
     for (NSString *valueString in _yValues) {
         float value = [valueString floatValue];
         
@@ -200,6 +208,8 @@
         
         //Change Bar Radius
         bar.barRadius = _barRadius;
+        bar.yMin = yMin;
+        bar.value = value;
         
         //Change Bar Background color
         bar.backgroundColor = _barBackgroundColor;

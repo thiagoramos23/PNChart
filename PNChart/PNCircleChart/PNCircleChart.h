@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "PNColor.h"
-#import "UICountingLabel.h"
+//#import "UICountingLabel.h"
 
 typedef NS_ENUM(NSUInteger, PNChartFormatType) {
   PNChartFormatTypePercent,
@@ -24,7 +24,7 @@ typedef NS_ENUM(NSUInteger, PNChartFormatType) {
 - (void)growChartByAmount:(NSNumber *)growAmount;
 - (id)initWithFrame:(CGRect)frame andTotal:(NSNumber *)total andCurrent:(NSNumber *)current andClockwise:(BOOL)clockwise andShadow:(BOOL)hasBackgroundShadow;
 
-@property (strong, nonatomic) UICountingLabel *countingLabel;
+//@property (strong, nonatomic) UICountingLabel *countingLabel;
 @property (nonatomic) UIColor *strokeColor;
 @property (nonatomic) NSNumber *total;
 @property (nonatomic) NSNumber *current;
